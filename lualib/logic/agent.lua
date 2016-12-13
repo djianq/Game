@@ -3,7 +3,6 @@ local netpack = require "netpack"
 local socket = require "socket"
 local sproto = require "sproto"
 local sprotoloader = require "sprotoloader"
-local ssetloader = require "ssetloader"
 
 local WATCHDOG
 local host
@@ -13,7 +12,6 @@ local CMD = {}
 local REQUEST = {}
 local client_fd
 local Uid
-local setting
 
 function REQUEST:get()
 	print("get", self.what)
@@ -105,9 +103,6 @@ function CMD.disconnect()
 end
 
 skynet.start(function()
-	setting = ssetloader.load()
-	print(setting)
-
 	skynet.dispatch("lua", function(_, _, command, ...)
 		local f = CMD[command]
 		skynet.ret(skynet.pack(f(...)))

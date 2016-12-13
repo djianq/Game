@@ -1,7 +1,7 @@
 local parser = require "sprotoparser"
 local core = require "sproto.core"
 local sproto = require "sproto"
-local serialize = require "serialize"
+local serialize = require "serialize.core"
 
 local loader = {}
 
@@ -24,6 +24,9 @@ end
 function loader.load(index)
 	local sp = core.loadproto(index)
 	--  no __gc in metatable
+
+	local p = serialize.loadpack("test")
+	local s = serialize.unpack(p)
 
 	return sproto.sharenew(sp)
 end

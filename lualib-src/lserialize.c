@@ -236,12 +236,13 @@ static void *rb_read(struct read_block *rb, void *buffer, int sz)
 
 static void rb_close(struct read_block *rb) 
 {
-	while(rb->current) 
-	{
-		struct block *next = rb->current->next;
-		free(rb->current);
-		rb->current = next;
-	}
+	// while(rb->current) 
+	// {
+	// 	struct block *next = rb->current->next;
+	// 	free(rb->current);
+	// 	rb->current = next;
+	// }
+	rb->current = NULL;
 	rb->len = 0;
 	rb->ptr = 0;
 }
@@ -502,7 +503,7 @@ static int lappend(lua_State *L)
 {
 	struct write_block b;
 	wb_init(&b, lua_touserdata(L, 1));
-	pack_from(L,&b,1);
+	pack_from(L, &b, 1);
 	struct block *ret = wb_close(&b);
 	lua_pushlightuserdata(L, ret);
 	return 1;
@@ -851,13 +852,42 @@ static int ldeserialize(lua_State *L)
 	return lua_gettop(L);
 }
 
+static int lloadpack(lua_State *L)
+{
+	struct save_pack *ptr;
+	const char *name = luaL_optstring(L, 1, 0);
+	if(NULL == name || strlen(name) <= 0 || strlen(name) > MAX_NAME_SIZE - 1)
+		return luaL_error(L, "Invalid global name");
+
+	ptr = G_pack.head;
+	while(NULL != ptr)
+	{
+		if(strncmp(name, ptr->name, MAX_NAME_SIZE) == 0)
+		{
+			if(ptr->pack)
+			{
+				lua_pushlightuserdata(L, ptr->pack);
+				return 1;
+			}
+			else
+			{
+				return luaL_error(L, "nil pack at name %s", name);
+			}
+		}
+
+		ptr = ptr->next;
+	}
+
+	return luaL_error(L, "nil pack at name %s", name);
+}
+
 static int lsavepack(lua_State *L)
 {
 	struct block *b = lua_touserdata(L, 1);
 	const char *name = luaL_optstring(L, 2, 0);
 	struct save_pack *ptr;
 
-	if(G_pack.size >= MAX_GLOBALSAVEPACK || strlen(name) <= 0 || strlen(name) > MAX_NAME_SIZE - 1) 
+	if(G_pack.size >= MAX_GLOBALSAVEPACK || NULL == name || strlen(name) <= 0 || strlen(name) > MAX_NAME_SIZE - 1) 
 	{
 		return luaL_error(L, "Invalid global slot size %d", G_pack.size + 1);
 	}
@@ -865,26 +895,27 @@ static int lsavepack(lua_State *L)
 	ptr = G_pack.head;
 	while(ptr != NULL)
 	{
-		if(strcmp(name, ptr->name) == 0)
-			return luaL_error(L, "Invalid global name %s", name);
+		if(strncmp(name, ptr->name, MAX_NAME_SIZE) == 0)
+			// return luaL_error(L, "Invalid global name %s", name);
+			return 1;
 
 		ptr = ptr->next;
 	}
 
-	struct save_pack node = {.pack = b, .next = NULL};
-	strcpy(node.name, name);
+	struct save_pack *p = (struct save_pack *)malloc(sizeof(*p));
+	memset(p, 0, sizeof(*p));
+	p->pack = b;
+	strcpy(p->name, name);
 	if(NULL == G_pack.head)
 	{
-		struct save_pack *x = &node;
-		G_pack.head = x;
-		G_pack.tail = x;
-		// G_pack.tail = G_pack.head;
-		// G_pack.size = G_pack.size + 1;
+		G_pack.head = p;
+		G_pack.tail = G_pack.head;
+		G_pack.size = G_pack.size + 1;
 	}
 	else
 	{
-		(G_pack.tail)->next = &node;
-		G_pack.tail = &node;
+		(G_pack.tail)->next = p;
+		G_pack.tail = p;
 	}
 
 	/* TODO : release old object (memory leak now, but thread safe)*/
@@ -917,7 +948,7 @@ static int deseristring(lua_State *L)
 	return lua_gettop(L) - 1;
 }
 
-int luaopen_serialize(lua_State *L) 
+int luaopen_serialize_core(lua_State *L) 
 {
 	luaL_Reg l[] = 
 	{
@@ -930,8 +961,10 @@ int luaopen_serialize(lua_State *L)
 		{"deseristring_string", deseristring},
 		{"dump", _dump},
 		{"savepack", lsavepack},
+		{"loadpack", lloadpack},
 		{NULL, NULL},
 	};
 	luaL_newlib(L, l);
+
 	return 1;
 }
