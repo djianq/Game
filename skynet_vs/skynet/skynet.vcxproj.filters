@@ -1,0 +1,879 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="3rd">
+      <UniqueIdentifier>{90c52eb2-6154-49b4-b6ba-98750e1befa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\jemalloc">
+      <UniqueIdentifier>{63d551aa-4fa5-49b1-9c45-af2ef0205e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\lpeg">
+      <UniqueIdentifier>{d402735f-a151-42cc-895b-830a2e665577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\lua">
+      <UniqueIdentifier>{1b1cde15-e9f8-4321-b74e-ad38faa95d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\lua-md5">
+      <UniqueIdentifier>{6689e4bf-4615-437a-b879-a822e9af4118}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples">
+      <UniqueIdentifier>{7e657145-f708-4b8d-8fbf-6a84f4e52add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\login">
+      <UniqueIdentifier>{980de3e9-7380-4ff5-9ef8-ed05595ca4e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lualib">
+      <UniqueIdentifier>{884ce68e-f74e-469b-9567-4e8273bf4bf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lualib\http">
+      <UniqueIdentifier>{d68afee8-0e60-4a0f-b809-59beb4574802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lualib\sharedata">
+      <UniqueIdentifier>{68bef7d3-7448-46a3-8b3c-0aaa8b53e284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lualib\skynet">
+      <UniqueIdentifier>{9d441443-692c-46c6-b4a0-7fad8db4801e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lualib\snax">
+      <UniqueIdentifier>{fd207140-5cc5-4149-b44d-2c9c5c7b6550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lualib-src">
+      <UniqueIdentifier>{1fe96b56-5f04-4c46-ac5e-39252b23a251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lualib-src\sproto">
+      <UniqueIdentifier>{ca246c92-b7f9-4e54-859d-b43056654d42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="service">
+      <UniqueIdentifier>{0dd4f9d3-0410-487d-8826-6355a82a8e8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="service-src">
+      <UniqueIdentifier>{95420c53-7412-4bf3-a13b-3f8b85fa048d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="skynet-src">
+      <UniqueIdentifier>{17f433b7-89ec-4d70-a803-ddb300757358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{97f0c6d0-3609-4c55-b848-429794642abc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\3rd\lpeg\makefile">
+      <Filter>3rd\lpeg</Filter>
+    </None>
+    <None Include="..\..\3rd\lpeg\re.lua">
+      <Filter>3rd\lpeg</Filter>
+    </None>
+    <None Include="..\..\3rd\lpeg\test.lua">
+      <Filter>3rd\lpeg</Filter>
+    </None>
+    <None Include="..\..\3rd\lua\Makefile">
+      <Filter>3rd\lua</Filter>
+    </None>
+    <None Include="..\..\3rd\lua\README">
+      <Filter>3rd\lua</Filter>
+    </None>
+    <None Include="..\..\3rd\lua-md5\README">
+      <Filter>3rd\lua-md5</Filter>
+    </None>
+    <None Include="..\..\examples\login\client.lua">
+      <Filter>examples\login</Filter>
+    </None>
+    <None Include="..\..\examples\login\gated.lua">
+      <Filter>examples\login</Filter>
+    </None>
+    <None Include="..\..\examples\login\logind.lua">
+      <Filter>examples\login</Filter>
+    </None>
+    <None Include="..\..\examples\login\main.lua">
+      <Filter>examples\login</Filter>
+    </None>
+    <None Include="..\..\examples\login\msgagent.lua">
+      <Filter>examples\login</Filter>
+    </None>
+    <None Include="..\..\examples\abort.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\agent.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\checkdeadloop.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\client.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\cluster1.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\cluster2.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\clustername.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config.c1">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config.c2">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config.login">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config.mc">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config.mysql">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config.userlog">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\config_log">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\globallog.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\injectlaunch.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\main.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\main_log.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\main_mysql.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\preload.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\proto.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\protoloader.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\share.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\simpledb.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\simplemonitor.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\simpleweb.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\userlog.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\examples\watchdog.lua">
+      <Filter>examples</Filter>
+    </None>
+    <None Include="..\..\lualib\http\httpc.lua">
+      <Filter>lualib\http</Filter>
+    </None>
+    <None Include="..\..\lualib\http\httpd.lua">
+      <Filter>lualib\http</Filter>
+    </None>
+    <None Include="..\..\lualib\http\internal.lua">
+      <Filter>lualib\http</Filter>
+    </None>
+    <None Include="..\..\lualib\http\sockethelper.lua">
+      <Filter>lualib\http</Filter>
+    </None>
+    <None Include="..\..\lualib\http\url.lua">
+      <Filter>lualib\http</Filter>
+    </None>
+    <None Include="..\..\lualib\sharedata\corelib.lua">
+      <Filter>lualib\sharedata</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\coroutine.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\debug.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\harbor.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\inject.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\injectcode.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\manager.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\queue.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet\remotedebug.lua">
+      <Filter>lualib\skynet</Filter>
+    </None>
+    <None Include="..\..\lualib\snax\gateserver.lua">
+      <Filter>lualib\snax</Filter>
+    </None>
+    <None Include="..\..\lualib\snax\hotfix.lua">
+      <Filter>lualib\snax</Filter>
+    </None>
+    <None Include="..\..\lualib\snax\interface.lua">
+      <Filter>lualib\snax</Filter>
+    </None>
+    <None Include="..\..\lualib\snax\loginserver.lua">
+      <Filter>lualib\snax</Filter>
+    </None>
+    <None Include="..\..\lualib\snax\msgserver.lua">
+      <Filter>lualib\snax</Filter>
+    </None>
+    <None Include="..\..\lualib\cluster.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\datacenter.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\dns.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\loader.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\md5.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\mongo.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\mqueue.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\multicast.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\mysql.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\redis.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\sharedata.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\sharemap.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\skynet.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\snax.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\socket.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\socketchannel.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\sproto.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\sprotoloader.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\lualib\sprotoparser.lua">
+      <Filter>lualib</Filter>
+    </None>
+    <None Include="..\..\service\bootstrap.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\cdummy.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\clusterd.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\clusterproxy.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\cmaster.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\cmemory.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\console.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\cslave.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\datacenterd.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\dbg.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\debug_agent.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\debug_console.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\gate.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\launcher.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\multicastd.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\service_mgr.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\sharedatad.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\service\snaxd.lua">
+      <Filter>service</Filter>
+    </None>
+    <None Include="..\..\test\pingserver.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\sharemap.sp">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testbson.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testcoroutine.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testdatacenter.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testdeadcall.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testdeadloop.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testdns.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testecho.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testharborlink.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testhttp.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testmemlimit.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testmongodb.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testmulticast.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testmulticast2.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testmysql.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testoverload.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testping.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testpipeline.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testqueue.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testredis.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testredis2.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testresponse.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testsha.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testsm.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testsocket.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\teststm.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testterm.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testtimer.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\testudp.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\test\time.lua">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\..\Makefile" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\3rd\lpeg\lpcap.c">
+      <Filter>3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lpeg\lpcode.c">
+      <Filter>3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lpeg\lpprint.c">
+      <Filter>3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lpeg\lptree.c">
+      <Filter>3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lpeg\lpvm.c">
+      <Filter>3rd\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lapi.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lauxlib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lbaselib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lbitlib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lcode.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lcorolib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lctype.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\ldblib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\ldebug.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\ldo.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\ldump.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lfunc.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lgc.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\linit.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\liolib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\llex.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lmathlib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lmem.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\loadlib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lobject.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lopcodes.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\loslib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lparser.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lstate.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lstring.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lstrlib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\ltable.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\ltablib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\ltm.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lua.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\luac.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lundump.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lutf8lib.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lvm.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua\lzio.c">
+      <Filter>3rd\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua-md5\compat-5.2.c">
+      <Filter>3rd\lua-md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua-md5\md5.c">
+      <Filter>3rd\lua-md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rd\lua-md5\md5lib.c">
+      <Filter>3rd\lua-md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lsha1.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-bson.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-clientsocket.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-cluster.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-crypt.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-debugchannel.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-memory.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-mongo.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-multicast.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-mysqlaux.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-netpack.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-profile.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-seri.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-sharedata.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-skynet.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-socket.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\lua-stm.c">
+      <Filter>lualib-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\sproto\lsproto.c">
+      <Filter>lualib-src\sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lualib-src\sproto\sproto.c">
+      <Filter>lualib-src\sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\service-src\service_gate.c">
+      <Filter>service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\service-src\service_harbor.c">
+      <Filter>service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\service-src\service_logger.c">
+      <Filter>service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\service-src\service_snlua.c">
+      <Filter>service-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\malloc_hook.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_daemon.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_env.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_error.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_handle.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_harbor.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_log.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_main.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_module.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_monitor.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_mq.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_server.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_socket.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_start.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\skynet_timer.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\skynet-src\socket_server.c">
+      <Filter>skynet-src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\3rd\lpeg\lpcap.h">
+      <Filter>3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lpeg\lpcode.h">
+      <Filter>3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lpeg\lpprint.h">
+      <Filter>3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lpeg\lptree.h">
+      <Filter>3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lpeg\lptypes.h">
+      <Filter>3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lpeg\lpvm.h">
+      <Filter>3rd\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lapi.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lauxlib.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lcode.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lctype.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\ldebug.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\ldo.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lfunc.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lgc.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\llex.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\llimits.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lmem.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lobject.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lopcodes.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lparser.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lprefix.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lstate.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lstring.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\ltable.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\ltm.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lua.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lua.hpp">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\luaconf.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lualib.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lundump.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lvm.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua\lzio.h">
+      <Filter>3rd\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua-md5\compat-5.2.h">
+      <Filter>3rd\lua-md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rd\lua-md5\md5.h">
+      <Filter>3rd\lua-md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lualib-src\lua-seri.h">
+      <Filter>lualib-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lualib-src\sproto\msvcint.h">
+      <Filter>lualib-src\sproto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lualib-src\sproto\sproto.h">
+      <Filter>lualib-src\sproto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\service-src\databuffer.h">
+      <Filter>service-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\service-src\hashid.h">
+      <Filter>service-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\atomic.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\luashrtbl.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\malloc_hook.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\rwlock.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_daemon.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_env.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_handle.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_harbor.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_imp.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_log.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_malloc.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_module.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_monitor.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_mq.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_server.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_socket.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\skynet_timer.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\socket_epoll.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\socket_kqueue.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\socket_poll.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\socket_server.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\skynet-src\spinlock.h">
+      <Filter>skynet-src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
