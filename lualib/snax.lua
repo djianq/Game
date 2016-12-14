@@ -5,7 +5,7 @@ local snax = {}
 local typeclass = {}
 
 local interface_g = skynet.getenv("snax_interface_g")
-local G = interface_g and require (interface_g) or { require = function() end }
+local G = interface_g and require (interface_g) or {require = function() end}
 interface_g = nil
 
 skynet.register_protocol {
@@ -23,14 +23,15 @@ function snax.interface(name)
 
 	local si = snax_interface(name, G)
 
-	local ret = {
+	local ret = 
+	{
 		name = name,
 		accept = {},
 		response = {},
 		system = {},
 	}
 
-	for _,v in ipairs(si) do
+	for _, v in ipairs(si) do
 		local id, group, name, f = table.unpack(v)
 		ret[group][name] = id
 	end
@@ -39,14 +40,14 @@ function snax.interface(name)
 	return ret
 end
 
-local meta = { __tostring = function(v) return string.format("[%s:%x]", v.type, v.handle) end}
+local meta = {__tostring = function(v) return string.format("[%s:%x]", v.type, v.handle) end}
 
 local skynet_send = skynet.send
 local skynet_call = skynet.call
 
 local function gen_post(type, handle)
 	return setmetatable({} , {
-		__index = function( t, k )
+		__index = function(t, k)
 			local id = type.accept[k]
 			if not id then
 				error(string.format("post %s:%s no exist", type.name, k))
@@ -59,7 +60,7 @@ end
 
 local function gen_req(type, handle)
 	return setmetatable({} , {
-		__index = function( t, k )
+		__index = function(t, k)
 			local id = type.response[k]
 			if not id then
 				error(string.format("request %s:%s no exist", type.name, k))
@@ -79,7 +80,7 @@ local function wrapper(handle, name, type)
 		}, meta)
 end
 
-local handle_cache = setmetatable( {} , { __mode = "kv" } )
+local handle_cache = setmetatable({} , {__mode = "kv"})
 
 function snax.rawnewservice(name, ...)
 	local t = snax.interface(name)

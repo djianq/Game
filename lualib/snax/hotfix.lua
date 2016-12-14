@@ -14,7 +14,7 @@ local function envid(f)
 	end
 end
 
-local function collect_uv(f , uv, env)
+local function collect_uv(f, uv, env)
 	local i = 1
 	while true do
 		local name, value = debug.getupvalue(f, i)
@@ -26,7 +26,7 @@ local function collect_uv(f , uv, env)
 		if uv[name] then
 			assert(uv[name].id == id, string.format("ambiguity local value %s", name))
 		else
-			uv[name] = { func = f, index = i, id = id }
+			uv[name] = {func = f, index = i, id = id}
 
 			if type(value) == "function" then
 				if envid(value) == env then
@@ -70,7 +70,7 @@ end
 local dummy_env = {}
 
 local function patch_func(funcs, global, group, name, f)
-	local desc = assert(find_func(funcs, group, name) , string.format("Patch mismatch %s.%s", group, name))
+	local desc = assert(find_func(funcs, group, name), string.format("Patch mismatch %s.%s", group, name))
 	local i = 1
 	while true do
 		local name, value = debug.getupvalue(f, i)

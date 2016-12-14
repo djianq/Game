@@ -6,7 +6,7 @@ local snax = require "snax"
 
 local snax_name = tostring(...)
 local func, pattern = snax_interface(snax_name, _ENV)
-local snax_path = pattern:sub(1,pattern:find("?", 1, true)-1) .. snax_name ..  "/"
+local snax_path = pattern:sub(1, pattern:find("?", 1, true) - 1) .. snax_name ..  "/"
 package.path = snax_path .. "?.lua;" .. package.path
 
 SERVICE_NAME = snax_name
@@ -17,7 +17,7 @@ local profile_table = {}
 local function update_stat(name, ti)
 	local t = profile_table[name]
 	if t == nil then
-		t = { count = 0,  time = 0 }
+		t = {count = 0, time = 0}
 		profile_table[name] = t
 	end
 	t.count = t.count + 1
@@ -35,18 +35,18 @@ local function timing(method, ...)
 	profile.start()
 	if method[2] == "accept" then
 		-- no return
-		err,msg = xpcall(method[4], traceback, ...)
+		err, msg = xpcall(method[4], traceback, ...)
 	else
-		err,msg = xpcall(return_f, traceback, method[4], ...)
+		err, msg = xpcall(return_f, traceback, method[4], ...)
 	end
 	local ti = profile.stop()
 	update_stat(method[3], ti)
-	assert(err,msg)
+	assert(err, msg)
 end
 
 skynet.start(function()
 	local init = false
-	local function dispatcher( session , source , id, ...)
+	local function dispatcher(session, source, id, ...)
 		local method = func[id]
 
 		if method[2] == "system" then
