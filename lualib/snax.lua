@@ -72,11 +72,12 @@ local function gen_req(type, handle)
 end
 
 local function wrapper(handle, name, type)
-	return setmetatable ({
-		post = gen_post(type, handle),
-		req = gen_req(type, handle),
-		type = name,
-		handle = handle,
+	return setmetatable (
+		{
+			post = gen_post(type, handle),
+			req = gen_req(type, handle),
+			type = name,
+			handle = handle,
 		}, meta)
 end
 
