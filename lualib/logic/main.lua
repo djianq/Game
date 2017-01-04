@@ -1,5 +1,6 @@
 local skynet = require "skynet"
 local sprotoloader = require "sprotoloader"
+local snax = require "snax"
 
 local max_client = 64
 
@@ -10,8 +11,7 @@ skynet.start(function()
 	if not skynet.getenv "daemon" then
 		local console = skynet.newservice("console")
 	end
-	-- skynet.newservice("debug_console", 8000)
-	-- skynet.newservice("simpledb")
+	skynet.newservice("snaxd", "pingserver")
 	skynet.newservice("mongodb_mgr", "127.0.0.1", "skynet")
 	local loginserver = skynet.newservice("logind")
 	skynet.call(loginserver, "lua", "open" , 
