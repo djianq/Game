@@ -14,52 +14,36 @@ handshake 1 {
 	}
 }
 
-get 2 {
-	request {
-		what 0 : string
-	}
-	response {
-		result 0 : string
-	}
-}
+quit 2 {}
 
-set 3 {
-	request {
-		what 0 : string
-		value 1 : string
-	}
-}
-
-quit 4 {}
-
-login_account 5 {
+login_account 3 {
 	request {
 		account 0 : string
 		password 1 : string
 	}
 }
 
-add_account 6 {
+add_account 4 {
 	request {
 		account 1 : string
 		password 2 : string
 	}
 }
 
-add_user 7 {
+add_user 5 {
 	request {
 		name 0 : string
 	}
 }
 
-login_user 8 {
+login_user 6 {
 	request {
 		uid 0 : integer
 		name 1 : string
 	}
 }
 
-login_game 9 {
+login_game 7 {
 	request {
 		uid 0 : integer
 		subid 1 : integer
@@ -67,7 +51,7 @@ login_game 9 {
 	}
 }
 
-logic_data 10 {
+logic_data 8 {
 	request {
 		data 0 : string
 		index 1 : integer

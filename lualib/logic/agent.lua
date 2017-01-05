@@ -14,14 +14,6 @@ local REQUEST = {}
 local client_fd
 local Uid
 
-function REQUEST:get()
-	print("get", self.what)
-end
-
-function REQUEST:set()
-	print("set", self.what, self.value)
-end
-
 function REQUEST:handshake()
 	return {msg = "Welcome to skynet, I will send heartbeat every 5 sec."}
 end
@@ -29,18 +21,6 @@ end
 function REQUEST:quit()
 	skynet.call(WATCHDOG, "lua", "close", client_fd)
 end
-
-function REQUEST:register()
-	local collection = "user"
-	local ret = skynet.call("MONGODB", "lua", "find", collection, {name = self.name})
-	if ret > 0 then return {msg = "Register Error, User is exist!"} end
-
-	ret = skynet.call("MONGODB", "lua", "insert", collection, {name = self.name, password = self.password})
-	if ret <= 0 then return {msg = "Register Error, Db wrong!"} 
-	else return {msg = "Register Successfully!!"}
-	end
-end
-
 
 local function request(name, args, response)
 	local f = REQUEST[name]

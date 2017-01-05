@@ -14,7 +14,7 @@ skynet.start(function()
 	skynet.newservice("snaxd", "pingserver")
 	skynet.newservice("mongodb_mgr", "127.0.0.1", "skynet")
 	local loginserver = skynet.newservice("logind")
-	skynet.call(loginserver, "lua", "open" , 
+	skynet.call(loginserver, "lua", "open", 
 	{
 		host = "0.0.0.0",
 		port = 1922,
