@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Microsoft\Office\Excel\Addins\工程1.Class1]
+"FriendlyName"="Excel加载项"
+"Description"="longzhiri的单元格工具"
+"LoadBehavior"=dword:00000003
+"CommandLineSafe"=dword:00000001

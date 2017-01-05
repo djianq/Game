@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MakeBar", "MakeBar\MakeBar.vbproj", "{B1561295-CC29-4DA2-B677-89219FCA5546}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MakeBarSetup", "MakeBarSetup\MakeBarSetup.vdproj", "{F2FD4BBF-F934-4BFE-A56F-0B400E32C831}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1561295-CC29-4DA2-B677-89219FCA5546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1561295-CC29-4DA2-B677-89219FCA5546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1561295-CC29-4DA2-B677-89219FCA5546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1561295-CC29-4DA2-B677-89219FCA5546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2FD4BBF-F934-4BFE-A56F-0B400E32C831}.Debug|Any CPU.ActiveCfg = Debug
+		{F2FD4BBF-F934-4BFE-A56F-0B400E32C831}.Debug|Any CPU.Build.0 = Debug
+		{F2FD4BBF-F934-4BFE-A56F-0B400E32C831}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
