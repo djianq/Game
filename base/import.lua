@@ -6,6 +6,8 @@ ALL_CLASS = ALL_CLASS or {}	-- 全局变量，记录所有 Class 与 Class:GetTy
 ALL_CLASS_PATH = ALL_CLASS_PATH or {}
 setmetatable(ALL_CLASS, {__mode = "kv"})
 
+--用Src里面的内容递归替换Dest里面的内容
+--目的是保持table的所有引用继续有效
 
 local function SafeImport(PathFile, Reload)
 	if PathFile[0] == '.' or PathFile[0] == '/' then

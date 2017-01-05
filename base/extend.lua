@@ -119,11 +119,6 @@ function safe_dofile(fname)
 		end
 	end
 
-	-- local env = {}
-	-- setmetatable(env, {__index = _G})
-	-- _ENV = env
-	-- return loader(fname)
-
 	local env = {}
 	setmetatable(env, {__index = _G})
 	return setfenv(loader, env)(fname)
