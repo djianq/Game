@@ -1,6 +1,7 @@
 local skynet = require "skynet"
 local mongo = require "mongo"
 local bson = require "bson"
+local sconfigloader = require "sconfigloader"
 
 require "skynet.manager"	-- import skynet.register
 
@@ -9,7 +10,7 @@ local CMD = {}
 
 function CMD.insert(cname, args)
 	local db = mongo.client({host = host})
-	local ret = db[db_name][cname]:safe_insert(args);
+	local ret = db[db_name][cname]:safe_insert(args)
 	assert(ret and ret.n == 1)
 	return ret.n
 end
@@ -40,6 +41,16 @@ skynet.start(function()
 		local f = CMD[command]
 		skynet.ret(skynet.pack(f(...)))
 	end)
+
+	local Data = sconfigloader.load("itemCfg")
+	for Id, item in pairs(Data["ConstInfo"]["≈‰÷√±Ì"] or {}) do
+		local ret = db[db_name]["item"]:findOne({ItemId = Id})
+		if ret and ret.ItemId == Id then
+			db[db_name]["item"]:update({ItemId = Id}, {ItemId = Id, BuyPrice = item["BuyPrice"], Name = item["Name"]})
+		else
+			db[db_name]["item"]:safe_insert({ItemId = Id, BuyPrice = item["BuyPrice"], Name = item["Name"]})
+		end
+	end
 
 	skynet.register "MONGODB"
 end)

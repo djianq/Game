@@ -71,6 +71,15 @@ end
 
 local function close_fd(fd)
 	local c = connection[fd]
+
+	local u = userfd_map[fd]
+	if u then
+		users[u.uid] = nil
+		account_map[u.account] = nil
+		userfd_map[fd] = nil
+		skynet.call(loginservice, "lua", "logout", u.account)
+	end
+
 	if c then
 		unforward(c)
 		connection[fd] = nil
