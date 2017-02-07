@@ -1,3 +1,4 @@
+-- module proto as examples/proto.lua
 package.path = "./examples/?.lua;" .. package.path
 
 local skynet = require "skynet"
