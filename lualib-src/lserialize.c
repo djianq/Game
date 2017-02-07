@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
+#include "stackbuff.h"
 
 #define TYPE_NIL 0
 #define TYPE_BOOLEAN 1
@@ -31,7 +32,15 @@
 #define BLOCK_SIZE 128
 #define MAX_DEPTH 32
 #define MAX_NAME_SIZE 32
-#define MAX_GLOBALSAVEPACK 32 
+#define MAX_GLOBALSAVEPACK 32
+
+static _Bool s_bSerializeComplexOptimize = false;
+static char s_szBuff[256];
+static struct StackBuff s_StackBuff = {.m_iPoolSize = 1024};
+#define APPEND_STRING(s) StackWrite(&s_StackBuff, s, strlen(s))
+#define APPEND_CHAR(s) StackWrite(&s_StackBuff, s, 1)
+#define PUSH_STACK(s)
+#define POP_STACK()
 
 struct block 
 {
@@ -68,10 +77,6 @@ struct save_pack_list
 	struct save_pack *tail;
 	int size;
 };
-
-static _Bool s_bSerializeComplexOptimize = false;
-static char s_szBuff[256];
-static CStackBuff s_StackBuff;
 
 static struct save_pack_list G_pack = {.head = NULL, .tail = NULL, .size = 0};
 
@@ -490,7 +495,7 @@ static void pack_from(lua_State *L, struct write_block *b, int from)
 	int n = lua_gettop(L) - from;
 	for(i = 1; i <= n; ++i) 
 	{
-		pack_one(L, b , from + i, 0);
+		pack_one(L, b, from + i, 0);
 	}
 }
 
@@ -506,6 +511,7 @@ static int lpack(lua_State *L)
 
 void SerializeSimple(lua_State *L, int idx)
 {
+	size_t i;
 	switch(lua_type(L, idx))
 	{
 	case LUA_TNIL:
@@ -526,7 +532,7 @@ void SerializeSimple(lua_State *L, int idx)
 		{
 			size_t n;
 			const char *s = lua_tolstring(L, idx, &n);
-			for(size_t i = 0; i < n; ++i)
+			for(i = 0; i < n; ++i)
 			{
 				switch(*s)
 				{
@@ -560,7 +566,7 @@ void SerializeSimple(lua_State *L, int idx)
 	}
 }
 
-void SerializeComplex(lua_State *L, int idx, _Bool savet = false, int layer = 1)
+void SerializeComplex(lua_State *L, int idx, _Bool savet, int layer)
 {
 	const char *clsname;
 	const char *key;
@@ -568,6 +574,7 @@ void SerializeComplex(lua_State *L, int idx, _Bool savet = false, int layer = 1)
 	lua_pushvalue(L, idx);
 	int tbl = lua_gettop(L);
 	int type;
+	int i;
 
 	if(layer > 20)
 		luaL_error(L, "serialize too depth ...");
@@ -577,35 +584,11 @@ void SerializeComplex(lua_State *L, int idx, _Bool savet = false, int layer = 1)
 	
 	if(lua_type(L, tbl) == LUA_TTABLE)
 	{
-#if CHECK_REPEAT_TABLE
-		// ºÏ≤È table ÷ÿ∏¥–Ú¡–ªØ£¨”–ø…ƒ‹–Œ≥…À¿—≠ª∑
-		sprintf(s_szBuff, "table: %p", lua_topointer(L, tbl));
-		const char *key = &s_szBuff[0];
-		map<string, string>::iterator itr = s_CheckRepeatTable.find(key);
-		if(itr != s_CheckRepeatTable.end())
-		{
-			printf("path 1 : %s\n", (itr->second.c_str()));
-			printf("path 2 : ");
-			list<string>::iterator itr = s_CheckStackPath.begin();
-			for(; itr != s_CheckStackPath.end(); ++itr)
-				printf("[%s]", (*itr).c_str());
-			printf("\t\t\t is %s\n", s_szBuff);
-			luaL_error(L, "serialize table repeat ...");
-		}
-		string ps;
-		list<string>::iterator pitr = s_CheckStackPath.begin();
-		for(; pitr != s_CheckStackPath.end(); ++pitr)
-		{
-			ps.append("["); ps.append((*pitr).c_str()); ps.append("]");
-		}
-		s_CheckRepeatTable[key] = ps;
-#endif
-
 		/**************************************************
-		 * ◊¢“‚£∫talbe ”– 2 ÷÷–ŒÃ¨£∫∆’Õ® table ∫Õ Class
+		 * Ê≥®ÊÑèÔºötalbe Êúâ 2 ÁßçÂΩ¢ÊÄÅÔºöÊôÆÈÄö table Âíå Class
 		 **************************************************/
 
-		// µ˜”√∑Ω∑®¿¥ªÒ»°–≈œ¢
+		// Ë∞ÉÁî®ÊñπÊ≥ïÊù•Ëé∑Âèñ‰ø°ÊÅØ
 		lua_pushstring(L, "GetType");
 		lua_gettable(L, tbl);						// t.GetType
 		type = lua_type(L, -1);
@@ -643,14 +626,10 @@ void SerializeComplex(lua_State *L, int idx, _Bool savet = false, int layer = 1)
 			int tbllen = 0;
 			if(s_bSerializeComplexOptimize)
 			{
-				tbllen = lua_objlen(L, -1);
-				for(int i = 1; i <= tbllen; ++i)
+				tbllen = lua_rawlen(L, -1);
+				for(i = 1; i <= tbllen; ++i)
 				{
 					lua_rawgeti(L, -1, i);
-#if CHECK_REPEAT_TABLE
-					string strv = str + "(value)";
-					key = strv.c_str();
-#endif
 					PUSH_STACK(key); SerializeComplex(L, -1, savet, layer); POP_STACK();
 					APPEND_STRING(",");
 					lua_pop(L, 1);
@@ -669,30 +648,9 @@ void SerializeComplex(lua_State *L, int idx, _Bool savet = false, int layer = 1)
 						continue;
 					}	
 				}
-#if CHECK_REPEAT_TABLE
-				string str;
-				if(lua_type(L, -2) == LUA_TSTRING)
-					str = string("\"") + lua_tostring(L, -2) + "\"";
-				else if(lua_type(L, -2) == LUA_TNUMBER)
-				{
-					sprintf(s_szBuff, "%.16g", lua_tonumber(L, -2));
-					str = s_szBuff;
-				}
-				else
-				{
-					sprintf(s_szBuff, "%s: %p", luaL_typename(L, -2), lua_topointer(L, -2));
-					str = s_szBuff;
-				}
-				string strk = str + "(key)";
-				key = strk.c_str();
-#endif
 				APPEND_STRING("[");
 				PUSH_STACK(key); SerializeComplex(L, -2, savet, layer); POP_STACK();
 				APPEND_STRING("]=");
-#if CHECK_REPEAT_TABLE
-				string strv = str + "(value)";
-				key = strv.c_str();
-#endif
 				PUSH_STACK(key); SerializeComplex(L, -1, savet, layer); POP_STACK();
 				APPEND_STRING(",");
 				lua_pop(L, 1);
@@ -711,13 +669,9 @@ void SerializeComplex(lua_State *L, int idx, _Bool savet = false, int layer = 1)
 static int lpackcomplex(lua_State *L)
 {
 	s_bSerializeComplexOptimize = false;
-	s_StackBuff.Clear();
-#if CHECK_REPEAT_TABLE
-	s_CheckStackPath.clear();
-	s_CheckRepeatTable.clear();
-#endif
-	SerializeComplex(L, 1, lua_toboolean(L, 2));
-	lua_pushlstring(L, s_StackBuff.GetBuff(), s_StackBuff.GetSize());
+	StackClear(&s_StackBuff);
+	SerializeComplex(L, 1, lua_toboolean(L, 2), 1);
+	lua_pushlstring(L, StackGetBuff(&s_StackBuff), StackGetSize(&s_StackBuff));
 	return 1;
 }
 
