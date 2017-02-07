@@ -2,7 +2,6 @@
 -- See config
 
 CONST_PATH = "lualib/logic/"
--- local util = require "util"
 
 -- 加载所有需要用 dofile 执行的模块
 DOFILELIST = 

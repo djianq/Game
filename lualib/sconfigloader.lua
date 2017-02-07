@@ -15,4 +15,3 @@ function loader.load(name)
 end
 
 return loader
-
