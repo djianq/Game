@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define TYPE_NIL 0
 #define TYPE_BOOLEAN 1
@@ -67,6 +68,10 @@ struct save_pack_list
 	struct save_pack *tail;
 	int size;
 };
+
+static _Bool s_bSerializeComplexOptimize = false;
+static char s_szBuff[256];
+static CStackBuff s_StackBuff;
 
 static struct save_pack_list G_pack = {.head = NULL, .tail = NULL, .size = 0};
 
@@ -496,6 +501,223 @@ static int lpack(lua_State *L)
 	pack_from(L, &b, 0);
 	struct block *ret = wb_close(&b);
 	lua_pushlightuserdata(L, ret);
+	return 1;
+}
+
+void SerializeSimple(lua_State *L, int idx)
+{
+	switch(lua_type(L, idx))
+	{
+	case LUA_TNIL:
+		APPEND_STRING("nil");
+		break;
+	case LUA_TNUMBER:
+		sprintf(s_szBuff, "%.16g", lua_tonumber(L, idx));
+		APPEND_STRING(s_szBuff);
+		break;
+	case LUA_TBOOLEAN:
+		if(lua_toboolean(L, idx))
+			APPEND_STRING("true");
+		else
+			APPEND_STRING("false");
+		break;
+	case LUA_TSTRING:
+		APPEND_STRING("\"");
+		{
+			size_t n;
+			const char *s = lua_tolstring(L, idx, &n);
+			for(size_t i = 0; i < n; ++i)
+			{
+				switch(*s)
+				{
+				case '"':
+				case '\\':
+				case '\n':	APPEND_STRING("\\"); APPEND_CHAR(s); break;
+				case '\r':	APPEND_STRING("\\r"); break;
+				case '\0':	APPEND_STRING("\\0"); break;
+				default:	APPEND_CHAR(s);
+				}
+				++s;
+			}
+		}
+		APPEND_STRING("\"");
+		break;
+	case LUA_TTABLE:
+		APPEND_STRING("\"<table>\"");
+		break;
+	case LUA_TFUNCTION:
+		APPEND_STRING("\"<function>\"");
+		break;
+	case LUA_TUSERDATA:
+		APPEND_STRING("\"<userdata>\"");
+		break;
+	case LUA_TTHREAD:
+		APPEND_STRING("\"<thread>\"");
+		break;
+	case LUA_TLIGHTUSERDATA:
+		APPEND_STRING("\"<lightuserdata>\"");
+		break;
+	}
+}
+
+void SerializeComplex(lua_State *L, int idx, _Bool savet = false, int layer = 1)
+{
+	const char *clsname;
+	const char *key;
+	int top = lua_gettop(L);
+	lua_pushvalue(L, idx);
+	int tbl = lua_gettop(L);
+	int type;
+
+	if(layer > 20)
+		luaL_error(L, "serialize too depth ...");
+	++layer;
+
+	key = NULL;
+	
+	if(lua_type(L, tbl) == LUA_TTABLE)
+	{
+#if CHECK_REPEAT_TABLE
+		// 检查 table 重复序列化，有可能形成死循环
+		sprintf(s_szBuff, "table: %p", lua_topointer(L, tbl));
+		const char *key = &s_szBuff[0];
+		map<string, string>::iterator itr = s_CheckRepeatTable.find(key);
+		if(itr != s_CheckRepeatTable.end())
+		{
+			printf("path 1 : %s\n", (itr->second.c_str()));
+			printf("path 2 : ");
+			list<string>::iterator itr = s_CheckStackPath.begin();
+			for(; itr != s_CheckStackPath.end(); ++itr)
+				printf("[%s]", (*itr).c_str());
+			printf("\t\t\t is %s\n", s_szBuff);
+			luaL_error(L, "serialize table repeat ...");
+		}
+		string ps;
+		list<string>::iterator pitr = s_CheckStackPath.begin();
+		for(; pitr != s_CheckStackPath.end(); ++pitr)
+		{
+			ps.append("["); ps.append((*pitr).c_str()); ps.append("]");
+		}
+		s_CheckRepeatTable[key] = ps;
+#endif
+
+		/**************************************************
+		 * 注意：talbe 有 2 种形态：普通 table 和 Class
+		 **************************************************/
+
+		// 调用方法来获取信息
+		lua_pushstring(L, "GetType");
+		lua_gettable(L, tbl);						// t.GetType
+		type = lua_type(L, -1);
+		if(type == LUA_TFUNCTION)					// type(t.GetType) == "function"
+		{
+			lua_pushvalue(L, tbl);
+			lua_pcall(L, 1, 1, 0);
+			clsname = lua_tostring(L, -1);			// t:GetType()
+			lua_pop(L, 1);
+
+			lua_pushstring(L, "_GetSaveData");
+			lua_gettable(L, tbl);
+			type = lua_type(L, -1);
+			if(type != LUA_TFUNCTION) luaL_error(L, "%s._GetSaveData must be function");
+			lua_pushvalue(L, tbl);
+			lua_pcall(L, 1, 2, 0);					// t:_GetSaveData()
+
+			APPEND_STRING("{__class_type__=\"");
+			APPEND_STRING(clsname);
+			APPEND_STRING("\",__init_args__=");
+			PUSH_STACK("1"); SerializeComplex(L, -2, savet, layer); POP_STACK();
+			if(savet)
+			{
+				APPEND_STRING(",__temp_args__=");
+				PUSH_STACK("0"); SerializeComplex(L, -1, savet, layer); POP_STACK();
+			}
+			lua_pop(L, 2);							// pop
+			APPEND_STRING(",}");
+		}
+		else
+		{
+			lua_pop(L, 1);
+			APPEND_STRING("{");
+
+			int tbllen = 0;
+			if(s_bSerializeComplexOptimize)
+			{
+				tbllen = lua_objlen(L, -1);
+				for(int i = 1; i <= tbllen; ++i)
+				{
+					lua_rawgeti(L, -1, i);
+#if CHECK_REPEAT_TABLE
+					string strv = str + "(value)";
+					key = strv.c_str();
+#endif
+					PUSH_STACK(key); SerializeComplex(L, -1, savet, layer); POP_STACK();
+					APPEND_STRING(",");
+					lua_pop(L, 1);
+				}
+			}
+
+			lua_pushnil(L);
+			while(lua_next(L, -2))
+			{
+				if(s_bSerializeComplexOptimize && tbllen > 0 && lua_isnumber(L, -2))
+				{
+					int idx = lua_tonumber(L, -2);
+					if(0 < idx && idx <= tbllen)
+					{
+						lua_pop(L, 1);
+						continue;
+					}	
+				}
+#if CHECK_REPEAT_TABLE
+				string str;
+				if(lua_type(L, -2) == LUA_TSTRING)
+					str = string("\"") + lua_tostring(L, -2) + "\"";
+				else if(lua_type(L, -2) == LUA_TNUMBER)
+				{
+					sprintf(s_szBuff, "%.16g", lua_tonumber(L, -2));
+					str = s_szBuff;
+				}
+				else
+				{
+					sprintf(s_szBuff, "%s: %p", luaL_typename(L, -2), lua_topointer(L, -2));
+					str = s_szBuff;
+				}
+				string strk = str + "(key)";
+				key = strk.c_str();
+#endif
+				APPEND_STRING("[");
+				PUSH_STACK(key); SerializeComplex(L, -2, savet, layer); POP_STACK();
+				APPEND_STRING("]=");
+#if CHECK_REPEAT_TABLE
+				string strv = str + "(value)";
+				key = strv.c_str();
+#endif
+				PUSH_STACK(key); SerializeComplex(L, -1, savet, layer); POP_STACK();
+				APPEND_STRING(",");
+				lua_pop(L, 1);
+			}
+			APPEND_STRING("}");
+		}
+	}
+	else
+	{
+		SerializeSimple(L, tbl);
+	}
+
+	lua_settop(L, top);
+}
+
+static int lpackcomplex(lua_State *L)
+{
+	s_bSerializeComplexOptimize = false;
+	s_StackBuff.Clear();
+#if CHECK_REPEAT_TABLE
+	s_CheckStackPath.clear();
+	s_CheckRepeatTable.clear();
+#endif
+	SerializeComplex(L, 1, lua_toboolean(L, 2));
+	lua_pushlstring(L, s_StackBuff.GetBuff(), s_StackBuff.GetSize());
 	return 1;
 }
 
@@ -962,6 +1184,7 @@ int luaopen_serialize_core(lua_State *L)
 		{"dump", _dump},
 		{"savepack", lsavepack},
 		{"loadpack", lloadpack},
+		{"packcomplex", lpackcomplex},
 		{NULL, NULL},
 	};
 	luaL_newlib(L, l);
