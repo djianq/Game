@@ -124,7 +124,7 @@ $(LUA_CLIB_PATH)/debugchannel.so : lualib-src/lua-debugchannel.c | $(LUA_CLIB_PA
 	$(CC) $(CFLAGS) $(SHARED) -Iskynet-src $^ -o $@	
 
 $(LUA_CLIB_PATH)/serialize.so : lualib-src/lserialize.c | $(LUA_CLIB_PATH)
-	$(CC) $(CFLAGS) $(SHARED) -Iskynet-src $^ -o $@
+	$(CC) $(CFLAGS) $(SHARED) -g -Iskynet-src $^ -o $@
 
 clean :
 	rm -f $(SKYNET_BUILD_PATH)/skynet $(CSERVICE_PATH)/*.so $(LUA_CLIB_PATH)/*.so

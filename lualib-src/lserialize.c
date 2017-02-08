@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
-#include "stackbuff.h"
 
 #define TYPE_NIL 0
 #define TYPE_BOOLEAN 1
@@ -33,14 +32,6 @@
 #define MAX_DEPTH 32
 #define MAX_NAME_SIZE 32
 #define MAX_GLOBALSAVEPACK 32
-
-static _Bool s_bSerializeComplexOptimize = false;
-static char s_szBuff[256];
-static struct StackBuff s_StackBuff = {.m_iPoolSize = 1024};
-#define APPEND_STRING(s) StackWrite(&s_StackBuff, s, strlen(s))
-#define APPEND_CHAR(s) StackWrite(&s_StackBuff, s, 1)
-#define PUSH_STACK(s)
-#define POP_STACK()
 
 struct block 
 {
@@ -509,172 +500,6 @@ static int lpack(lua_State *L)
 	return 1;
 }
 
-void SerializeSimple(lua_State *L, int idx)
-{
-	size_t i;
-	switch(lua_type(L, idx))
-	{
-	case LUA_TNIL:
-		APPEND_STRING("nil");
-		break;
-	case LUA_TNUMBER:
-		sprintf(s_szBuff, "%.16g", lua_tonumber(L, idx));
-		APPEND_STRING(s_szBuff);
-		break;
-	case LUA_TBOOLEAN:
-		if(lua_toboolean(L, idx))
-			APPEND_STRING("true");
-		else
-			APPEND_STRING("false");
-		break;
-	case LUA_TSTRING:
-		APPEND_STRING("\"");
-		{
-			size_t n;
-			const char *s = lua_tolstring(L, idx, &n);
-			for(i = 0; i < n; ++i)
-			{
-				switch(*s)
-				{
-				case '"':
-				case '\\':
-				case '\n':	APPEND_STRING("\\"); APPEND_CHAR(s); break;
-				case '\r':	APPEND_STRING("\\r"); break;
-				case '\0':	APPEND_STRING("\\0"); break;
-				default:	APPEND_CHAR(s);
-				}
-				++s;
-			}
-		}
-		APPEND_STRING("\"");
-		break;
-	case LUA_TTABLE:
-		APPEND_STRING("\"<table>\"");
-		break;
-	case LUA_TFUNCTION:
-		APPEND_STRING("\"<function>\"");
-		break;
-	case LUA_TUSERDATA:
-		APPEND_STRING("\"<userdata>\"");
-		break;
-	case LUA_TTHREAD:
-		APPEND_STRING("\"<thread>\"");
-		break;
-	case LUA_TLIGHTUSERDATA:
-		APPEND_STRING("\"<lightuserdata>\"");
-		break;
-	}
-}
-
-void SerializeComplex(lua_State *L, int idx, _Bool savet, int layer)
-{
-	const char *clsname;
-	const char *key;
-	int top = lua_gettop(L);
-	lua_pushvalue(L, idx);
-	int tbl = lua_gettop(L);
-	int type;
-	int i;
-
-	if(layer > 20)
-		luaL_error(L, "serialize too depth ...");
-	++layer;
-
-	key = NULL;
-	
-	if(lua_type(L, tbl) == LUA_TTABLE)
-	{
-		/**************************************************
-		 * 注意：talbe 有 2 种形态：普通 table 和 Class
-		 **************************************************/
-
-		// 调用方法来获取信息
-		lua_pushstring(L, "GetType");
-		lua_gettable(L, tbl);						// t.GetType
-		type = lua_type(L, -1);
-		if(type == LUA_TFUNCTION)					// type(t.GetType) == "function"
-		{
-			lua_pushvalue(L, tbl);
-			lua_pcall(L, 1, 1, 0);
-			clsname = lua_tostring(L, -1);			// t:GetType()
-			lua_pop(L, 1);
-
-			lua_pushstring(L, "_GetSaveData");
-			lua_gettable(L, tbl);
-			type = lua_type(L, -1);
-			if(type != LUA_TFUNCTION) luaL_error(L, "%s._GetSaveData must be function");
-			lua_pushvalue(L, tbl);
-			lua_pcall(L, 1, 2, 0);					// t:_GetSaveData()
-
-			APPEND_STRING("{__class_type__=\"");
-			APPEND_STRING(clsname);
-			APPEND_STRING("\",__init_args__=");
-			PUSH_STACK("1"); SerializeComplex(L, -2, savet, layer); POP_STACK();
-			if(savet)
-			{
-				APPEND_STRING(",__temp_args__=");
-				PUSH_STACK("0"); SerializeComplex(L, -1, savet, layer); POP_STACK();
-			}
-			lua_pop(L, 2);							// pop
-			APPEND_STRING(",}");
-		}
-		else
-		{
-			lua_pop(L, 1);
-			APPEND_STRING("{");
-
-			int tbllen = 0;
-			if(s_bSerializeComplexOptimize)
-			{
-				tbllen = lua_rawlen(L, -1);
-				for(i = 1; i <= tbllen; ++i)
-				{
-					lua_rawgeti(L, -1, i);
-					PUSH_STACK(key); SerializeComplex(L, -1, savet, layer); POP_STACK();
-					APPEND_STRING(",");
-					lua_pop(L, 1);
-				}
-			}
-
-			lua_pushnil(L);
-			while(lua_next(L, -2))
-			{
-				if(s_bSerializeComplexOptimize && tbllen > 0 && lua_isnumber(L, -2))
-				{
-					int idx = lua_tonumber(L, -2);
-					if(0 < idx && idx <= tbllen)
-					{
-						lua_pop(L, 1);
-						continue;
-					}	
-				}
-				APPEND_STRING("[");
-				PUSH_STACK(key); SerializeComplex(L, -2, savet, layer); POP_STACK();
-				APPEND_STRING("]=");
-				PUSH_STACK(key); SerializeComplex(L, -1, savet, layer); POP_STACK();
-				APPEND_STRING(",");
-				lua_pop(L, 1);
-			}
-			APPEND_STRING("}");
-		}
-	}
-	else
-	{
-		SerializeSimple(L, tbl);
-	}
-
-	lua_settop(L, top);
-}
-
-static int lpackcomplex(lua_State *L)
-{
-	s_bSerializeComplexOptimize = false;
-	StackClear(&s_StackBuff);
-	SerializeComplex(L, 1, lua_toboolean(L, 2), 1);
-	lua_pushlstring(L, StackGetBuff(&s_StackBuff), StackGetSize(&s_StackBuff));
-	return 1;
-}
-
 static int lappend(lua_State *L) 
 {
 	struct write_block b;
@@ -1138,7 +963,6 @@ int luaopen_serialize_core(lua_State *L)
 		{"dump", _dump},
 		{"savepack", lsavepack},
 		{"loadpack", lloadpack},
-		{"packcomplex", lpackcomplex},
 		{NULL, NULL},
 	};
 	luaL_newlib(L, l);
